@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+  namespace: default
+  labels:
+    app: hello
+  annotations:
+    keel.sh/policy: "all"             # Always update when image digest changes
+    keel.sh/trigger: "poll"             # Poll the registry for updates
+    keel.sh/pollSchedule: "@every 1m" # Check every 1 minute
+    keel.sh/approvals: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      restartPolicy: Always           # Always restart on failure
+      containers:
+      - name: hello
+        image: ghcr.io/bachvn1711/hello:test
+        imagePullPolicy: Always       # Always pull the latest image
+

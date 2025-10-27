@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hnr-vehicle-app-deployment     # deployment name
+  labels:
+    app: hnr-vehicle-app
+spec:
+  replicas: 1                          # one pod is enough
+  selector:
+    matchLabels:
+      app: hnr-vehicle-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: hnr-vehicle-app
+    spec:
+      serviceAccountName: default
+
+      # equivalent to --network=host
+      hostNetwork: true
+      imagePullSecrets:
+        - name: regcred
+      # ensure pod schedules only on arm64 nodes
+      nodeSelector:
+        kubernetes.io/arch: amd64
+
+      containers:
+        - name: hnr-vehicle-app
+          image: autonxtai/hnr_vehicle_app:latest   
+          imagePullPolicy: Always
+
+          # equivalent to -it
+          stdin: true
+          tty: true
+
+          # environment variables
+          env:
+            - name: OPENCV_VIDEOIO_PRIORITY_V4L2
+              value: "1000"
+
+          # mount device and host directory
+          volumeMounts:
+            - name: video0
+              mountPath: /dev/video0
+            - name: video-folder
+              mountPath: /video
+
+      volumes:
+        - name: video0
+          hostPath:
+            path: /dev/video0
+            type: CharDevice
+        - name: video-folder
+          hostPath:
+            path: /video
+            type: DirectoryOrCreate
