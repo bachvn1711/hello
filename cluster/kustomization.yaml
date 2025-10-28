@@ -4,9 +4,10 @@ metadata:
   name: my-cluster
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 10s
   path: ./deployments
   prune: true
+  suspend: true
   sourceRef:
     kind: GitRepository
     name: flux-system

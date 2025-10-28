@@ -1,10 +1,11 @@
-apiVersion: image.toolkit.fluxcd.io/v1beta1
+apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImageUpdateAutomation
 metadata:
   name: hello-auto
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 10s
+  suspend: true
   sourceRef:
     kind: GitRepository
     name: flux-system

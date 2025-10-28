@@ -1,4 +1,4 @@
-apiVersion: image.toolkit.fluxcd.io/v1beta2
+apiVersion: image.toolkit.fluxcd.io/v1
 kind: ImagePolicy
 metadata:
   name: hello-policy
@@ -6,6 +6,9 @@ metadata:
 spec:
   imageRepositoryRef:
     name: hello-repo
+  filterTags:
+    pattern: '^test$'
   policy:
-    tag: test
+    alphabetical:
+      order: asc
 
