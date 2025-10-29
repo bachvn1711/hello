@@ -5,11 +5,6 @@ metadata:
   namespace: default
   labels:
     app: hello
-  annotations:
-    keel.sh/policy: "all"             # Always update when image digest changes
-    keel.sh/trigger: "poll"             # Poll the registry for updates
-    keel.sh/pollSchedule: "@every 1m" # Check every 1 minute
-    keel.sh/approvals: "1"
 spec:
   replicas: 1
   selector:
